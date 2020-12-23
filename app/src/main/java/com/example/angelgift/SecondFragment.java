@@ -27,7 +27,7 @@ public class SecondFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mTextTitle.setText("Hell Hydra!");
+        //mTextTitle.setText("Hell Hydra!");
         /*
         mTextTitle.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -3,9 +3,11 @@ package com.example.angelgift;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.Window;
 
+import com.facebook.stetho.Stetho;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
@@ -13,8 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
-    public static final String EXTRA_MESSAGE
-            = "com.example.android.twoactivities.extra.MESSAGE";
+    //public static final String EXTRA_MESSAGE = "com.example.angelgift.extra.MESSAGE";
 
     //private BottomNavigationView mBNV;
     private FirstFragment mFirstFragment;
@@ -23,11 +24,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     //public static final String DETAIL_MESSAGE = "DetailMessage";
     private Intent inputdataIntent;
 
+    private String selectedDate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+        Stetho.initializeWithDefaults(this);//設置資料庫監視
 
         ((BottomNavigationView) findViewById(R.id.navigation)).setOnNavigationItemSelectedListener(this);
         ((BottomNavigationView) findViewById(R.id.navigation)).setSelectedItemId(R.id.navigation_first);
@@ -57,6 +61,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 return true;
 
             case R.id.navigation_second:
+                Bundle extras = new Bundle();
+                extras.putString("EXTRA_MODE", "INPUT_MODE");
+                extras.putString("EXTRA_DATE", selectedDate);
+                inputdataIntent.putExtras(extras);
                 return true;
 
             case R.id.navigation_third:
@@ -78,7 +86,23 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     }
 
     public void setSelectedDate(String s) {
-        inputdataIntent.putExtra(EXTRA_MESSAGE, s);
+        selectedDate = s;
+        /*
+        Bundle extras = new Bundle();
+        extras.putString("EXTRA_MODE", "INPUT_MODE");
+        extras.putString("EXTRA_DATE", s);
+        inputdataIntent.putExtras(extras);
+        */
+        //inputdataIntent.putExtra(EXTRA_MESSAGE, s);
+    }
+
+    public void checkSelectedItem(String s, int id) {
+        Bundle extras = new Bundle();
+        extras.putString("EXTRA_MODE", "MODIFY_MODE");
+        extras.putString("EXTRA_DATE", s);
+        extras.putInt("EXTRA_CLASSID", id);
+        inputdataIntent.putExtras(extras);
+        startActivity(inputdataIntent);
     }
     /*
     private void hideFragment(FragmentTransaction fragmentTransaction, Fragment F, String tag) {
